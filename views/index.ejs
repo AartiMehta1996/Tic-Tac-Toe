@@ -1,0 +1,104 @@
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+<style>
+    .tbl {
+        justify-content: center;
+        align-content: center;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+        height: 50%;
+    }
+    .tblTd {
+        border:1px solid black;
+        width: 20%;
+        height: 20%;
+        align-items: center;
+        justify-content: center;
+    }
+    .tblTitle {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        padding: 10px;
+    }
+    .btn {
+        justify-content: center;
+        display: flex;
+        padding: 10px;
+    }
+</style>
+<script>
+    let toggleInput = true; let inputVal = 'X'; let inputtedVal; let rowCheck; let colCheck;let crossCheck1; let crossCheck2;
+    let xRowCount = 0; let oRowCount = 0; let xColCount = 0; let oColCount = 0; let xCrossCount1 = 0; let oCrossCount1 =0;
+    let xCrossCount2 = 0; let oCrossCount2 =0; let totalCount =0;
+    function checkWin() {
+        xCrossCount1 = 0; oCrossCount1 = 0;  xCrossCount2 = 0; oCrossCount2 = 0;
+        for(let i =0,k=2; i<3,k>-1; i++,k--) {
+            xRowCount = 0;oRowCount = 0;xColCount = 0;oColCount = 0;
+            for (let j = 0; j < 3; j++) {
+                rowCheck = $('#' + i + j).text(); // 00,01,02 // 10, 11, 12 // 20, 21, 22
+                colCheck = $('#' + j + i).text(); // 00, 10, 20
+                if (rowCheck === 'X') xRowCount++;
+                if (rowCheck === 'O') oRowCount++;
+                if (colCheck === 'X') xColCount++;
+                if (colCheck === 'O') oColCount++;
+            }
+            crossCheck1 = $('#' + i + i).text(); // 03, 12, 21
+            crossCheck2 = $('#' + k + i).text(); // 20, 11, 02
+            if (crossCheck1 === 'X') xCrossCount1++;
+            if (crossCheck1 === 'O') oCrossCount1++;
+            if (crossCheck2 === 'X') xCrossCount2++;
+            if (crossCheck2 === 'O') oCrossCount2++;
+            if (xRowCount === 3 || xColCount === 3 || xCrossCount1 === 3 || xCrossCount2 === 3) {
+                alert('Player 1 is winner');
+                location.reload();
+                break;
+            } else if (oRowCount === 3 || oColCount === 3 || oCrossCount1 === 3 || xCrossCount2 === 3) {
+                alert('Player 2 is winner');
+                location.reload();
+                break;
+            }
+        }
+    }
+
+    function tbClick(row, col){
+        inputVal = toggleInput ? 'X' : 'O'
+        toggleInput = !toggleInput;
+        inputtedVal = $('#' + row + col).text();
+        if(!inputtedVal) {
+            totalCount++;
+            $('#' + row + col).text(inputVal);
+            if(totalCount === 9) {
+                alert('No one win');
+                location.reload()
+            } else checkWin();
+        }
+    }
+</script>
+    <div>
+        <div class="tblTitle"> Tic Tac Toe</div>
+        <table class="tbl">
+            <tbody id="tbBody"></tbody>
+            <% for(let i=0; i<3;i++) { %>
+                <tr>
+                    <% for(let j=0;j<3;j++) {%>
+                        <td class="tblTd" id="<%- i%><%-j %>" onclick="tbClick('<%- i %>','<%- j%>')"></td>
+                    <% } %>
+                </tr>
+            <% } %>
+        </table>
+        <div class="row btn" >
+            <div class="col-6">
+                <button onclick="location.reload()">Restart</button>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
